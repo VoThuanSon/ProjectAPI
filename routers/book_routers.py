@@ -1,13 +1,20 @@
 import json
+import jwt
+import uvicorn
+
+from datetime import datetime, timedelta
+from typing import Union, Any
+from fastapi import FastAPI, HTTPException, Depends
 from typing import Optional
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, Query
 from fastapi.responses import HTMLResponse
+from fastapi.security import HTTPBearer
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 import os,time, requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 import pandas as pd
 class Book(BaseModel):
     title: str
@@ -17,7 +24,22 @@ class Book(BaseModel):
     rating: int
     publisher_country: str
 DATA_FILE = "books_with_country.json"
+ACCOUNT_FILE = "account.json"
+SECURITY_ALGORITHM = 'HS256'
+SECRET_KEY = '123456'
+reusable_oauth2 = HTTPBearer(
+    scheme_name='Authorization'
+)
 
+def generate_token(username: Union[str, Any]) -> str:
+    expire = datetime.utcnow() + timedelta(
+        seconds=60 * 60 * 24 * 3  # Expired after 3 days
+    )
+    to_encode = {
+        "exp": expire, "username": username
+    }
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=SECURITY_ALGORITHM)
+    return encoded_jwt
 def rating_to_numeric(rating):
     rating_map = {
         'One': 1,
@@ -32,6 +54,16 @@ base_url = 'https://books.toscrape.com/catalogue/category/books/young-adult_21/i
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+@router.get('/api/token')
+def get_token(username: str, password: str):
+    account = []
+    with open(ACCOUNT_FILE, encoding="utf-8") as f:
+        account = json.load(f)
+    account = [acc for acc in account if acc.get("username", "").lower() == username.lower() and acc.get("password", "").lower() == password.lower()]
+    if not account:
+        raise HTTPException(status_code=403, detail="Invalid username or password")
+    token = generate_token(username)
+    return {"token": token}
 @router.get("/api/craw_book_data", response_class=HTMLResponse)
 def craw_book_data(request: Request):
     book_data = get_book_data()
@@ -41,7 +73,7 @@ def craw_book_data(request: Request):
         json.dump(book_data, json_file, indent=2, ensure_ascii=False)
     return templates.TemplateResponse("book_views.html", {"request": request, "books": book_data,"message" : 'Save books data success to list_book.csv'})
 
-@router.get("/api/books", response_class=HTMLResponse)
+@router.get("/api/books", response_class=HTMLResponse, dependencies=[Depends(reusable_oauth2)])
 def get_all_books(request: Request, country: Optional[str] = Query(None)):
     books = []
     if os.path.exists(DATA_FILE) and os.path.getsize(DATA_FILE) > 0:

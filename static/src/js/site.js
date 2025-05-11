@@ -9,7 +9,31 @@ async function loadContent(endpoint) {
 function createBook() {
     $("#createBookModal").modal('show');
 }
-
+function typeToken() {
+    $("#tokenModal").modal('show');
+}
+async function createToken() {
+    let username = $("[name='username']").val();
+    let password = $("[name='password']").val();
+    const res = await fetch(`/api/token?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+    const data = await res.text();
+    $("#createTokenModal").modal('hide');
+    document.getElementById("content").innerHTML = data;
+}
+function generateToken() {
+    $("#createTokenModal").modal('show');
+}
+async function auth() {
+    let token = $("[name='token']").val();
+    const res = await fetch(`/api/books/`,{
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    const data = await res.text();
+    $("#tokenModal").modal('hide');
+    document.getElementById("content").innerHTML = data;
+}
 async function onSaveBook() {
     let bookTitle = $("[name='book_title']").val();
     let bookPrice = $("[name='book_price']").val() || 0;

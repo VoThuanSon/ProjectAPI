@@ -20,20 +20,79 @@
     <h1 class="text-center">Project API</h1>
     <div class="row justify-content-around mb-3">
         <button class="btn btn-primary" onclick="loadContent('/api/craw_book_data')">Craw Book Data</button>
-        <button class="btn btn-primary" onclick="loadContent('/api/books')">Show Book Data</button>
+        <button class="btn btn-primary" onclick="typeToken()">Show Book Data</button>
         <button class="btn btn-primary" onclick="loadContent('/api/book_country_random')">Random Country To Book
         </button>
         <button class="btn btn-primary" onclick="loadContent('/api/get_all_country')">Get Country Data</button>
+        <button class="btn btn-primary" onclick="generateToken()">Get Token</button>
     </div>
     <div class="row justify-content-around">
         <div class="input-group mb-3 w-50">
-            <input type="text" class="form-control" placeholder="Search book with country" aria-label="Search book with country"
+            <input type="text" class="form-control" placeholder="Search book with country"
+                   aria-label="Search book with country"
                    aria-describedby="search_book_country" id="search_book_value">
             <span class="input-group-text search-book-button" onclick="searchBookWithCountry()">Search</span>
         </div>
     </div>
     <div>
         <div id="content">
+        </div>
+    </div>
+<!--        modal type token-->
+    <div class="modal fade" id="tokenModal" tabindex="-1" role="dialog" aria-labelledby="tokenModal"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Type token</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="token">token</span>
+                            <input type="token" class="form-control" placeholder="token" aria-label="token"
+                                   aria-describedby="token" name="token">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="auth()">Auth</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--    modal gen token-->
+    <div id="modal-holder">
+        <div class="modal fade" id="createTokenModal" tabindex="-1" role="dialog" aria-labelledby="createTokenModal"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Token</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="username">username</span>
+                            <input type="text" class="form-control" placeholder="username" aria-label="username"
+                                   aria-describedby="username" name="username">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="password">password</span>
+                            <input type="password" class="form-control" placeholder="password" aria-label="password"
+                                   aria-describedby="password" name="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="createToken()">Generate</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
