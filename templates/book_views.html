@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+</head>
+<body>
+<h1>List Books</h1>
+<p class="text-success">{{message}}</p>
+<div id="modal-holder">
+    <div class="modal fade" id="createBookModal" tabindex="-1" role="dialog" aria-labelledby="createBookModal"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="book_title">Book Title</span>
+                        <input type="text" class="form-control" placeholder="Book Title" aria-label="Book Title"
+                               aria-describedby="book_title" name="book_title">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="book_price">Price</span>
+                        <input type="number" class="form-control" placeholder="Price" aria-label="Price"
+                               aria-describedby="book_price" name="book_price">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="onSaveBook()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <button class="btn btn-primary" onclick="createBook()">Create Book</button>
+</div>
+<div class="mt-3">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Availability</th>
+            <th>Country</th>
+            <th>Rating</th>
+            <th>Product Page Link</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+        <tr>
+            <td class="book-title">{{ book.title }}</td>
+            <td>{{ book.price }}</td>
+            <td>{{ book.availability }}</td>
+            <td>{{ book.publisher_country}}</td>
+            <td>{{ book.rating}}</td>
+            <td>
+                <a href="{{ book.product_link }}" target="_blank">
+                    {{ book.product_link }}
+                </a>
+            </td>
+            <td>
+                <button class="btn btn-primary" onclick="deleteBook(event)">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project API</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/static/src/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/src/js/site.js"></script>
+</head>
+<body>
+<div class="container">
+    <div id="overlay" class="d-none">
+        <div id="loader"></div>
+    </div>
+    <h1 class="text-center">Project API</h1>
+    <div class="row justify-content-around mb-3">
+        <button class="btn btn-primary" onclick="loadContent('/api/craw_book_data')">Craw Book Data</button>
+        <button class="btn btn-primary" onclick="loadContent('/api/books')">Show Book Data</button>
+        <button class="btn btn-primary" onclick="loadContent('/api/book_country_random')">Random Country To Book
+        </button>
+        <button class="btn btn-primary" onclick="loadContent('/api/get_all_country')">Get Country Data</button>
+    </div>
+    <div class="row justify-content-around">
+        <div class="input-group mb-3 w-50">
+            <input type="text" class="form-control" placeholder="Search book with country" aria-label="Search book with country"
+                   aria-describedby="search_book_country" id="search_book_value">
+            <span class="input-group-text search-book-button" onclick="searchBookWithCountry()">Search</span>
+        </div>
+    </div>
+    <div>
+        <div id="content">
+        </div>
+    </div>
+
+</div>
+</body>
+</head>
+</html>
